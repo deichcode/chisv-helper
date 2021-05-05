@@ -1,0 +1,17 @@
+{
+
+  "manifest_version": 2,
+  "name": "chisv helper",
+  "version": "1.0",
+
+  "description": "Adds some useful features to the chisv tool",
+
+
+  "content_scripts": [
+    {
+      "matches": ["*://new.chisv.org/*"],
+      "js": ["jquery-3.6.0.js", "moment-with-locales.js", "moment-timezone-with-data.js","chisv-helper.js"]
+    }
+  ]
+
+}
