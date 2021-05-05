@@ -1,14 +1,45 @@
 const TASK_TAB_TITLE = "Tasks"
 const START_COLUMN_HEADER = "Starts"
-const STARTS_LOCAL_COLUMN_HEADER = "Starts local"
+const STARTS_LOCAL_COLUMN_HEADER = "Starts\xa0local"
 
 const ENDS_COLUMN_HEADER = "Ends"
-const ENDS_LOCAL_COLUMN_HEADER = "Ends local"
+const ENDS_LOCAL_COLUMN_HEADER = "Ends\xa0local"
 
 let currentlySettingLocalTimes = false
 
+let dateFormat
+let timeFormat
+
 const locale = window.navigator.userLanguage || window.navigator.language;
 moment.locale(locale)
+
+const discoverDateFormat = function () {
+    if (!$('#testDate').length) {
+        let testDate = moment('1999-12-31 13:00')
+        console.log(testDate.format(''))
+        $('.table-wrapper').before(`<span>Format used by chisv-helper extension for parsing: <span id="testDate">${testDate.local().format('l LT')}</span><br/><small>If this format does not match the format in the table please change either the locale in your profile or in the brows. The settings in the profile change how the date and time is displayed in the table. The settings of the browser change which format is used for parsing.</small></span>`)
+        let checkDate = $('#testDate').text()
+        $('#testDate').remove()
+        let leadingMonth = checkDate.startsWith('12')
+        let leadingYear = checkDate.startsWith('1999')
+        let isTwelveHourClock = checkDate.includes('PM')
+
+        if (leadingMonth) {
+            dateFormat = "MM-DD-YYYY"
+        } else if (leadingYear) {
+            dateFormat = "YYYY-MM-DD"
+        } else {
+            dateFormat = "DD-MM-YYYY"
+        }
+
+        if (isTwelveHourClock) {
+            timeFormat = "hh:mm a"
+        } else {
+            timeFormat = "HH:mm"
+        }
+    }
+}
+
 
 const insertLocalTimes = function () {
     let currentTabContent = $('section.tab-content > div:visible')
@@ -39,24 +70,27 @@ const insertLocalTimes = function () {
         let endText = endCell.text()
 
 
-        let start = moment.tz(dateText + " " + startText, "D.M.YYYY HH:mm", "Asia/Tokyo")
-        let end = moment.tz(dateText + " " + endText, "D.M.YYYY HH:mm", "Asia/Tokyo")
+        let start = moment.tz(dateText + " " + startText, `${dateFormat} ${timeFormat}`, "Asia/Tokyo")
+        let end = moment.tz(dateText + " " + endText, `${dateFormat} ${timeFormat}`, "Asia/Tokyo")
 
         let localStartsCell = $(tr).find("[data-label='Starts local']")
-        if(!localStartsCell.length) {
+        if (!localStartsCell.length) {
             localStartsCell = startCell.clone()
             localStartsCell.attr("data-label", "Starts local")
             startCell.after(localStartsCell)
         }
-        localStartsCell.text(start.local().format('dd,\xa0D.M.YYYY HH:mm'))
+        localStartsCell.text(start.local().format('LT'))
+        localStartsCell.append(`<br/><small style="font-size: .8rem; color:gray">${start.local().format('dd,\xa0l')}</small>`)
 
         let localEndsCell = $(tr).find("[data-label='Ends local']")
-        if(!localEndsCell.length) {
+        if (!localEndsCell.length) {
             localEndsCell = endCell.clone()
             localEndsCell.attr("data-label", "Ends local")
             endCell.after(localEndsCell)
         }
-        localEndsCell.text(end.local().format('dd,\xa0D.M.YYYY HH:mm'))
+        localEndsCell.text(end.local().format('LT'))
+        localEndsCell.append(`<br/><small style="font-size: .8rem; color:gray">${start.local().format('dd,\xa0l')}</small>`)
+
     })
     window.setTimeout(function () {
         currentlySettingLocalTimes = false
@@ -71,11 +105,11 @@ const config = {childList: true, subtree: true};
 
 // Callback function to execute when mutations are observed
 const callback = function (mutationsList, observer) {
-    console.log("mutation and state is: ", currentlySettingLocalTimes)
     let currentActiveTab = $('nav.tabs').find('.is-active')
     if (!currentlySettingLocalTimes && currentActiveTab.text().trim() === TASK_TAB_TITLE) {
         let taskTabIndex = $('nav.tabs > ul > li').index(currentActiveTab)
         currentlySettingLocalTimes = true
+        discoverDateFormat()
         insertLocalTimes(taskTabIndex);
     }
 };
