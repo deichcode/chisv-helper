@@ -5,7 +5,12 @@
   "version": "1.0",
 
   "description": "Adds some useful features to the chisv tool",
+  "permissions": [],
 
+  "icons": {
+    "48": "icons/chisv-helper-48.png",
+    "96": "icons/chisv-helper-96.png"
+  },
 
   "content_scripts": [
     {
