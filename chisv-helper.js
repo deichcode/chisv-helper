@@ -89,7 +89,7 @@ const insertLocalTimes = function () {
             endCell.after(localEndsCell)
         }
         localEndsCell.text(end.local().format('LT'))
-        localEndsCell.append(`<br/><small style="font-size: .8rem; color:gray">${start.local().format('dd,\xa0l')}</small>`)
+        localEndsCell.append(`<br/><small style="font-size: .8rem; color:gray">${end.local().format('dd,\xa0l')}</small>`)
 
     })
     window.setTimeout(function () {
