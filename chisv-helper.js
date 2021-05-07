@@ -51,6 +51,7 @@ const insertLocalTimes = function () {
         let startsLocalHead = startsHead.clone()
         startsLocalHead.find(`div:contains(${START_COLUMN_HEADER})`).text(STARTS_LOCAL_COLUMN_HEADER)
         startsLocalHead.append(`<small style="font-size: .8rem; color:gray">${moment.tz.guess()}</small>`)
+        startsLocalHead.removeClass('is-sortable')
         startsHead.after(startsLocalHead)
     }
 
@@ -59,6 +60,7 @@ const insertLocalTimes = function () {
         let endsLocalHead = endsHead.clone()
         endsLocalHead.find(`div:contains(${ENDS_COLUMN_HEADER})`).text(ENDS_LOCAL_COLUMN_HEADER)
         endsLocalHead.append(`<small style="font-size: .8rem; color:gray">${moment.tz.guess()}</small>`)
+        endsLocalHead.removeClass('is-sortable')
         endsHead.after(endsLocalHead)
     }
 
