@@ -40,10 +40,16 @@ const discoverDateFormat = function () {
     }
 }
 
-
 const insertLocalTimes = function () {
-    let currentTabContent = $('section.tab-content > div:visible')
-    let tableHead = currentTabContent.find('thead')
+    console.log("insertLocalTimes")
+    let $tasksTab = $(`nav.tabs>ul>li:contains(${TASK_TAB_TITLE})`)
+    let tasksTabIndex = $tasksTab.index()
+    console.log('taskTab', $tasksTab)
+    console.log('taskTabIndex', tasksTabIndex)
+    let taskTabContent = $(`section.tab-content > div:nth-child(${tasksTabIndex + 1})`)
+    console.log('taskTabContent', taskTabContent)
+    let tableHead = taskTabContent.find('thead')
+    console.log('tablehead', tableHead)
 
     let startsHead = tableHead.find(`div:contains(${START_COLUMN_HEADER})`).closest('th')
     if (!tableHead.find(`div:contains('${STARTS_LOCAL_COLUMN_HEADER}')`).length) {
@@ -61,7 +67,7 @@ const insertLocalTimes = function () {
         endsHead.after(endsLocalHead)
     }
 
-    let tableBody = currentTabContent.find('tbody')
+    let tableBody = taskTabContent.find('tbody')
     tableBody.children('tr').each(function (index, tr) {
         let dateText = $(tr).find("[data-label='Date']").text()
         let startCell = $(tr).find("[data-label='Starts']")
@@ -105,12 +111,11 @@ const config = {childList: true, subtree: true};
 
 // Callback function to execute when mutations are observed
 const callback = function (mutationsList, observer) {
-    let currentActiveTab = $('nav.tabs').find('.is-active')
-    if (!currentlySettingLocalTimes && currentActiveTab.text().trim() === TASK_TAB_TITLE) {
-        let taskTabIndex = $('nav.tabs > ul > li').index(currentActiveTab)
+    let $conferenceTabNavigation = $('nav.tabs')
+    if (!currentlySettingLocalTimes && $conferenceTabNavigation.length) {
         currentlySettingLocalTimes = true
         discoverDateFormat()
-        insertLocalTimes(taskTabIndex);
+        insertLocalTimes();
     }
 };
 
