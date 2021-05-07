@@ -41,15 +41,10 @@ const discoverDateFormat = function () {
 }
 
 const insertLocalTimes = function () {
-    console.log("insertLocalTimes")
     let $tasksTab = $(`nav.tabs>ul>li:contains(${TASK_TAB_TITLE})`)
     let tasksTabIndex = $tasksTab.index()
-    console.log('taskTab', $tasksTab)
-    console.log('taskTabIndex', tasksTabIndex)
     let taskTabContent = $(`section.tab-content > div:nth-child(${tasksTabIndex + 1})`)
-    console.log('taskTabContent', taskTabContent)
     let tableHead = taskTabContent.find('thead')
-    console.log('tablehead', tableHead)
 
     let startsHead = tableHead.find(`div:contains(${START_COLUMN_HEADER})`).closest('th')
     if (!tableHead.find(`div:contains('${STARTS_LOCAL_COLUMN_HEADER}')`).length) {
@@ -107,7 +102,7 @@ const insertLocalTimes = function () {
 const targetNode = document.getElementsByClassName('section')[0];
 
 // Options for the observer (which mutations to observe)
-const config = {childList: true, subtree: true};
+const config = {attributes: true, attributeFilter: ['class'], childList: true, subtree: true};
 
 // Callback function to execute when mutations are observed
 const callback = function (mutationsList, observer) {
@@ -116,6 +111,9 @@ const callback = function (mutationsList, observer) {
         currentlySettingLocalTimes = true
         discoverDateFormat()
         insertLocalTimes();
+        $(".is-sortable").on('click', function(event){
+            insertLocalTimes()
+        });
     }
 };
 
