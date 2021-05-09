@@ -23,6 +23,7 @@ let timeFormat = undefined
 
 observerPageContentChanges()
 
+//Manual call only necessary for better development experience with auto refresh enabled
 setLocalTimes()
 
 function observerPageContentChanges() {
