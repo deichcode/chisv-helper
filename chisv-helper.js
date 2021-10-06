@@ -1,5 +1,6 @@
-const CURRENT_VENUES_LOCATION = "Asia/Tokyo"
 const TASK_TAB_TITLE = "Tasks"
+
+let VENUE_URL_PATTERN = "chisv.org/conference/"
 
 const START_COLUMN_HEADER = "Starts"
 const STARTS_LOCAL_COLUMN_HEADER = "Starts\xa0local"
@@ -8,6 +9,15 @@ const STARTS_LOCAL_DATA_LABEL = "Starts local"
 const ENDS_COLUMN_HEADER = "Ends"
 const ENDS_LOCAL_COLUMN_HEADER = "Ends\xa0local"
 const ENDS_LOCAL_DATA_LABEL = "Ends local"
+
+let currentVenueTimeZone = ""
+
+let timeZones = {
+    "chi2021": "Asia/Tokyo",
+    "uist2021": "Etc/UTC",
+    "cscw2021": "Etc/GMT-4",
+    "iss2021": "Europe/Warsaw"
+}
 
 const columnsDataLabelsCreatedByExtension = [STARTS_LOCAL_DATA_LABEL, ENDS_LOCAL_DATA_LABEL]
 
@@ -24,7 +34,9 @@ let timeFormat = undefined
 observerPageContentChanges()
 
 //Manual call only necessary for better development experience with auto refresh enabled
-setLocalTimes()
+if (isVenueSubpage()) {
+    setLocalTimes()
+}
 
 function observerPageContentChanges() {
     const pageContentBelowTopNavBar = document.getElementsByClassName('section')[0]
@@ -34,9 +46,16 @@ function observerPageContentChanges() {
 }
 
 function pageContentChangedCallback(mutationsList) {
+    if (!isVenueSubpage()) {
+        return;
+    }
     let nodesChangedByApp = mutationsList.filter(m => !columnsDataLabelsCreatedByExtension.includes(m.target?.attributes["data-label"]?.nodeValue))
     let $conferenceTabNavigation = $('nav.tabs')
     let conferenceTabNavigationIsVisible = $conferenceTabNavigation.length
+    determineVenue()
+    if (currentVenueTimeZone === undefined) {
+        return;
+    }
     if (!extensionIsInitialized && conferenceTabNavigationIsVisible) {
         initializeExtension()
     }
@@ -52,6 +71,18 @@ function pageContentChangedCallback(mutationsList) {
         window.clearTimeout(calculateLocalTimesTimer)
         setLocalTimes()
     }
+}
+
+function isVenueSubpage() {
+    let url = window.location.toString()
+    return url.indexOf(VENUE_URL_PATTERN) !== -1
+}
+
+function determineVenue() {
+    let url = window.location.toString()
+    let venueIdentifierStartingIndex = url.indexOf(VENUE_URL_PATTERN) + VENUE_URL_PATTERN.length
+    let venueIdentifier = url.substring(venueIdentifierStartingIndex)
+    currentVenueTimeZone = timeZones[venueIdentifier]
 }
 
 function initializeExtension() {
@@ -154,6 +185,7 @@ function insertLocalTimeCell(currentRow, originalTimeCell, localCellDataLabel) {
 
 function setLocalTimes() {
     calculateLocalTimesTimer = window.setTimeout(function () {
+        if(tasksTabContent === undefined) { return }
         let tableBody = tasksTabContent.find('tbody')
         tableBody.children('tr').each(function (index, task) {
             setLocalTime(task);
@@ -162,14 +194,14 @@ function setLocalTimes() {
     }, 100)
 }
 
-function setLocalTime(tr) {
-    let startsCell = $(tr).find("[data-label='Starts']")
-    let localStartsCell = insertLocalTimeCell(tr, startsCell, STARTS_LOCAL_DATA_LABEL)
+function setLocalTime(task) {
+    let startsCell = $(task).find("[data-label='Starts']")
+    let localStartsCell = insertLocalTimeCell(task, startsCell, STARTS_LOCAL_DATA_LABEL)
 
-    let endsCell = $(tr).find("[data-label='Ends']")
-    let localEndsCell = insertLocalTimeCell(tr, endsCell, ENDS_LOCAL_DATA_LABEL)
+    let endsCell = $(task).find("[data-label='Ends']")
+    let localEndsCell = insertLocalTimeCell(task, endsCell, ENDS_LOCAL_DATA_LABEL)
 
-    let dateText = $(tr).find("[data-label='Date']").text().trim()
+    let dateText = $(task).find("[data-label='Date']").text().trim()
     let start = parseDate(startsCell, dateText)
     let end = parseDate(endsCell, dateText)
 
@@ -179,7 +211,7 @@ function setLocalTime(tr) {
 
 function parseDate(timeCell, dateText) {
     let timeText = timeCell.text().trim()
-    return moment.tz(dateText + " " + timeText, `${dateFormat} ${timeFormat}`, CURRENT_VENUES_LOCATION)
+    return moment.tz(dateText + " " + timeText, `${dateFormat} ${timeFormat}`, currentVenueTimeZone)
 }
 
 function displayLocalTime(localTimeCell, time) {
