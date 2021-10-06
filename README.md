@@ -6,6 +6,10 @@ Adds some useful features to the chisv tool
 1. Drag and Drop .xpi file (from the [latest release](https://github.com/deichcode/chisv-helper/releases/latest)) into browser or maybe also double click could work
 
 ### Chrome
+#### Via Chrome Web Store
+Download it from the [Chrome Web Store](https://chrome.google.com/webstore/detail/chisv-helper/ihbafjoepnjdodohjcajljollcpmdabd?hl=en-US)
+
+#### Install Manually
 1. Extract chrome-vX.X.X.zip file (from the [latest release](https://github.com/deichcode/chisv-helper/releases/latest))
 2. Open Extensions page in Chrome (Click the puzzle icon in the top right and then select **Manage Extensions** in the drop-down)
 ![extensions-chrome](https://user-images.githubusercontent.com/5639787/117260391-08366800-ae1d-11eb-9b9f-0b5602a2edc3.png)
