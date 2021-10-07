@@ -15,7 +15,7 @@ let currentVenueTimeZone = ""
 let timeZones = {
     "chi2021": "Asia/Tokyo",
     "uist2021": "Etc/UTC",
-    "cscw2021": "Etc/GMT-4",
+    "cscw2021": "America/New_York",
     "iss2021": "Europe/Warsaw"
 }
 
