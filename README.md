@@ -2,10 +2,10 @@
 Adds some useful features to the chisv tool
 
 ## Installation instructions
-### Firefox
+### Firefox 🦊
 1. Drag and Drop .xpi file (from the [latest release](https://github.com/deichcode/chisv-helper/releases/latest)) into browser or maybe also double click could work
 
-### Chrome
+### Chrome 🐙
 #### Via Chrome Web Store
 Download it from the [Chrome Web Store](https://chrome.google.com/webstore/detail/chisv-helper/ihbafjoepnjdodohjcajljollcpmdabd?hl=en-US)
 
@@ -23,11 +23,7 @@ Download it from the [Chrome Web Store](https://chrome.google.com/webstore/detai
 ### Preperations
 1. Update the version in the **manifest.json** according to [semantic versioning](https://semver.org).
 
-### Chrome
-1. Create a zip file that contains all repositories content. The root level of the zip file must mirror the root level of the repository.
-2. Upload the zip to the [Chrome Web Store Developer Console](https://chrome.google.com/u/1/webstore/devconsole)
-
-### Firefox
+### Firefox 🦊
 1. If not already done install the [web-ext](https://extensionworkshop.com/documentation/develop/web-ext-command-reference/#web-ext-sign) command line tool.
 2. Set the value of "manifest_version" in **manifest.json** to 2, to maintain be compatible to Firefox (discard the change before checking in the code.
 3. Make a test run by execute `web-ext run` at the project's root level.
@@ -35,3 +31,8 @@ Download it from the [Chrome Web Store](https://chrome.google.com/webstore/detai
 5. Upload the resulting file to a new release in GitHub
 6. Enter the location of the new version into the `update.json` file
 7. Commit and push the `update.json` file
+
+### Chrome 🐙
+1. Create a zip file that contains all repositories content. The root level of the zip file must mirror the root level of the repository.
+2. Upload the zip to the [Chrome Web Store Developer Console](https://chrome.google.com/u/1/webstore/devconsole)
+
