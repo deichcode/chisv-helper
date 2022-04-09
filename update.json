@@ -2,6 +2,10 @@
   "addons": {
     "  {1529df80-b7a8-4eb5-85ff-86f2cdc01c92}": {
       "updates": [
+        {
+          "version": "1.1.3",
+          "update_link": "https://github.com/deichcode/chisv-helper/releases/download/1.1.3/chisv_helper-1.1.3-an+fx.xpi"
+        }
       ]
     }
   }
