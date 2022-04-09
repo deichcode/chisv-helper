@@ -1,5 +1,6 @@
 # chisv-helper
-Adds some useful features to the chisv tool
+Adds time conversion to your local time zone to chisv.
+Of course, errors may still occur and I take no responsiblity if an error led to an inintended bidding. Please always double check the times.
 
 ## Installation instructions
 ### Firefox 🦊
