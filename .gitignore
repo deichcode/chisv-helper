@@ -1,5 +1,5 @@
 .idea
 web-ext-artifacts
-chrome.zip
+chrome*.zip
 .web-extension-id
 .DS_Store
